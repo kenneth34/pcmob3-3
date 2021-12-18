@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, View, TouchableOpacity, StyleSheet, TextInput } from "react-native";
+import { createStackNavigator} from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
 
 export default function AddScreen({ route, navigation }) {
   const [text, setText] = useState("[]");
@@ -14,7 +16,7 @@ export default function AddScreen({ route, navigation }) {
       ></TextInput>
       <View style={styles.buttons}>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("Notes", { text })}
           style={[styles.button, styles.submitButton]}
         >
           <Text style={styles.buttonText}>Submit</Text>

@@ -7,12 +7,28 @@ import {
  TouchableOpacity,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
+import * as SQLite from "expo-sqlite";
 
-export default function NotesScreen({ navigation }) {
+const db = SQLite.openDatabase("notes.db");
+
+export default function NotesScreen({ route, navigation }) {
  const [notes, setNotes] = useState([
-   { title: "Walk the cat", done: false, id: "0" },
-   { title: "Feed the elephant", done: false, id: "1" },
+   //{ title: "Walk the cat", done: false, id: "0" },
+   //{ title: "Feed the elephant", done: false, id: "1" },
  ]);
+
+ useEffect(() => {
+   db.transaction((tx) => {
+     tx.executeSql(
+       `CREATE TABLE IF NOT EXISTS
+       notes
+       (id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT,
+        done INT);`
+     );
+   });
+  }, []);
+   
 
  useEffect(() => {
    navigation.setOptions({
@@ -28,6 +44,24 @@ export default function NotesScreen({ navigation }) {
      ),
    });
  });
+
+ useEffect(() => {
+  if (route.params?.text) {
+    db.transaction((tx) => {
+      tx.executeSql("INSERT INTO notes (done, value) VALUES (0, ?)", [
+        route.params.text,
+      ]);
+    });
+
+    const newNote = {
+      title: route.params.text,
+      done: false,
+      id: notes.length.toString(),
+    };
+    setNotes([...notes, newNote]);
+  }
+}, [route.params?.text]);
+
 
  function addNote() {
    navigation.navigate("Add Note");

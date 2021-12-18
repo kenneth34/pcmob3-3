@@ -10,12 +10,13 @@ import NotesStack from "./screens/NotesStack";
 import AddScreen from "./screens/AddScreen";
 
 
+
 const db = SQLite.openDatabase("notes.db");
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator mode="modal" headerMode="">
+      <Stack.Navigator model="modal">
         <Stack.Screen
           name="Notes Stack"
           component={NotesStack}
