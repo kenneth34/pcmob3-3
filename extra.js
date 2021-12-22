@@ -48,6 +48,14 @@ export default function App() {
             </InnerStack.Navigator>
     );
   }
+  
+//from Apps.js
+  <TouchableOpacity onPress={() => {
+    alert('You tapped the button!');
+  }}
+  title="Press Me">
+       <MaterialIcons name="check-box-outline-blank" size={24} color="black" />
+       </TouchableOpacity>
    
 
    

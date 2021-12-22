@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity, StyleSheet, TextInput } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView } from "react-native";
 import { createStackNavigator} from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
+
 export default function AddScreen({ route, navigation }) {
-  const [text, setText] = useState("[]");
+  const [text, setText] = useState("");
  
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    
+    <KeyboardAvoidingView style={{flex: 1}} behaviour="padding">
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text style={styles.label}>Add your todo</Text>
+      
       <TextInput
         style={styles.textInput}
         value={text}
@@ -27,13 +31,16 @@ export default function AddScreen({ route, navigation }) {
         >
           <Text style={styles.buttonText}>Cancel</Text>
         </TouchableOpacity>
+        
       </View>
- 
+     
+
       <Text style={{ marginTop: 40, color: "grey" }}>
         This is what you typed:
       </Text>
       <Text style={{ color: "#333", marginTop: 10 }}>{text}</Text>
     </View>
+    </KeyboardAvoidingView>
   );
  }
  

@@ -5,16 +5,21 @@ import {
  View,
  FlatList,
  TouchableOpacity,
+ Pressable,
+
 } from "react-native";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, MaterialIcons, Ionicons } from "@expo/vector-icons";
 import * as SQLite from "expo-sqlite";
+import CheckBox from 'react-native-check-box';
+import NativePermissionsAndroid from "react-native/Libraries/PermissionsAndroid/NativePermissionsAndroid";
 
 const db = SQLite.openDatabase("notes.db");
 
 export default function NotesScreen({ route, navigation }) {
  const [notes, setNotes] = useState([
-   //{ title: "Walk the cat", done: false, id: "0" },
-   //{ title: "Feed the elephant", done: false, id: "1" },
+   { title: "Walk the cat", done: false, id: "0" },
+   { title: "Feed the elephant", done: false, id: "1" },
+   
  ]);
 
  useEffect(() => {
@@ -53,6 +58,7 @@ export default function NotesScreen({ route, navigation }) {
       ]);
     });
 
+    
     const newNote = {
       title: route.params.text,
       done: false,
@@ -66,9 +72,32 @@ export default function NotesScreen({ route, navigation }) {
  function addNote() {
    navigation.navigate("Add Note");
  }
+  
+const deleteNote = id => {
+  setNotes(prevNotes => {
+    return prevNotes.filter(notes => notes.id != id)
+  })
+}
+
+function MyCheckbox() {
+  const [checked, onChange] = useState(false);
+
+  function onCheckmarkPress() {
+    onChange(!checked);
+  }
+
+  return (
+    <Pressable
+      style={[styles.checkboxBase, checked && styles.checkboxChecked]}
+      onPress={onCheckmarkPress}>
+      {checked && <Ionicons name="checkmark" size={24} color="white" />}
+    </Pressable>
+  );
+}
 
  function renderItem({ item }) {
    return (
+      
      <View
        style={{
          padding: 10,
@@ -76,10 +105,36 @@ export default function NotesScreen({ route, navigation }) {
          paddingBottom: 20,
          borderBottomColor: "#ccc",
          borderBottomWidth: 1,
+         flexDirection: "row",
+         justifyContent: "space-between",
        }}
-     >
-       <Text style={{ textAlign: "left", fontSize: 16 }}>{item.title}</Text>
+     > 
+     
+      
+
+      <View style={styles.checkboxContainer}>
+        <MyCheckbox />
+       
+      </View>
+ 
+        
+
+     
+     
+       
+       <Text style={{ textAlign: "left", fontSize: 18,  }}>{item.title}</Text>
+       
+       <TouchableOpacity onPress={() => deleteNote(item.id)}>
+         <MaterialIcons
+        name="delete"
+        size={24}
+        color="black"
+        style={{ marginRight: 20}}
+        
+     />
+     </TouchableOpacity>
      </View>
+     
    );
  }
 
@@ -90,6 +145,7 @@ export default function NotesScreen({ route, navigation }) {
        data={notes}
        renderItem={renderItem}
      />
+     
    </View>
  );
 }
@@ -101,4 +157,39 @@ const styles = StyleSheet.create({
    alignItems: "center",
    justifyContent: "center",
  },
+ doneNote: {
+   color: "red",
+ },
+ checkboxBase: {
+  width: 26,
+  height: 26,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 4,
+  borderWidth: 2,
+  borderColor: 'coral',
+  backgroundColor: 'transparent',
+},
+
+checkboxChecked: {
+  backgroundColor: 'coral',
+},
+
+appContainer: {
+  flex: 1,
+  alignItems: 'center',
+},
+
+appTitle: {
+  marginVertical: 16,
+  fontWeight: 'bold',
+  fontSize: 24,
+},
+
+checkboxContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+},
+
+
 });

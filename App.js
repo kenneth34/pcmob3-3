@@ -1,14 +1,14 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState }  from "react";
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput } from "react-native";
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, KeyboardAvoidingView, } from "react-native";
 import { createStackNavigator} from "@react-navigation/stack";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
 //import { TouchableOpacity } from "react-native-gesture-handler";
 import * as SQLite from "expo-sqlite";
 import NotesStack from "./screens/NotesStack";
 import AddScreen from "./screens/AddScreen";
-
+import CheckBox from 'react-native-check-box';
 
 
 const db = SQLite.openDatabase("notes.db");
@@ -66,6 +66,7 @@ function addNote() {
 
 function renderItem({ item }) {
   return (
+    
     <View
       style={{
         padding: 10,
@@ -75,19 +76,29 @@ function renderItem({ item }) {
         borderBottomWidth: 1,
       }}
     >
-      <Text style={{ textAlign: "left", fontSize: 16 }}>{item.title}</Text>
-    </View>
+      <Text style={{ textAlign: "left", fontSize: 20 }}>{item.title}</Text>
+      
+     
+       </View>
+     
+     
   );
 }
 
 return (
   <View style={styles.container}>
     <FlatList
-      style={{ width: "100%" }}
+      style={{ width: "50%" }}
       data={notes}
       renderItem={renderItem}
-    />
-  </View>
+      />
+     <MaterialIcons 
+     name="delete"
+     size={24}
+     color="black"
+     style={{ marginRight: 20}}
+     /> 
+    </View>
 );
 }
 
